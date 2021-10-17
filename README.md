@@ -75,6 +75,7 @@ docker run -d \
 * Unit Test
 * Integration Test
 * SQLite - support state
+* [Logger](./src/core/logger/README.md)
 
 ### TODOS
 

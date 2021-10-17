@@ -9,6 +9,7 @@ import { CreateEmployeeDto, UpdateEmployeeDto } from '../src/rest-api/employees/
 import { EmployeesService } from '../src/services/employee.service';
 import { Employee } from '../src/repository';
 import { LoggerService } from '../src/core';
+import { getLoggerProviderToken } from '../src/core/logger/logger.provider';
 
 
 describe('EmployeesController (e2e)', () => {
@@ -30,8 +31,12 @@ describe('EmployeesController (e2e)', () => {
           provide: getRepositoryToken(Employee),
           useClass: Repository,
         },
+        {
+          provide: getLoggerProviderToken('EmployeesService'),
+          useClass: LoggerService
+        },
         EmployeesService,
-        LoggerService,
+
       ],
     }).compile();
 

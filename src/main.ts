@@ -3,16 +3,18 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { LoggerService } from './core';
+import { Logger } from './core';
+import { getLoggerProviderToken } from './core/logger/logger.provider';
 
 async function bootstrap() {
+  Logger('Main'); // declare new logger before initalizing the application
+
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
 
   // set logger
-  const logger = await app.resolve(LoggerService);
-  logger.setContext('Main');
+  const logger = await app.resolve(getLoggerProviderToken('Main'));
   app.useLogger(logger);
 
   // set validation

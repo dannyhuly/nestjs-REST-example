@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindManyOptions } from 'typeorm';
+
 import { Employee } from '../repository';
-import { LoggerService } from '../core';
+import { LoggerService, Logger } from '../core';
 import { IEmployee } from '../models/IEmployee';
 import { IPagingRequest } from '../models/IPagingRequest';
 
@@ -11,10 +12,8 @@ import { IPagingRequest } from '../models/IPagingRequest';
 export class EmployeesService {
     constructor(
         @InjectRepository(Employee) private employeeRepository: Repository<Employee>,
-        private logger: LoggerService
-    ) {
-        logger.setContext('EmployeesService');
-    }
+        @Logger('EmployeesService') private logger: LoggerService
+    ) { }
 
     async create(employee: IEmployee) {
         this.logger.verbose(`create ${employee}`);

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { CoreModule, LoggerService } from '../src/core';
+import { CoreModule, LoggerService, Logger } from '../src/core';
 
 
 describe('CoreModule (e2e)', () => {
@@ -17,12 +17,12 @@ describe('CoreModule (e2e)', () => {
 
   it('Should expose logger', async () => {
     const logger = await app.resolve(LoggerService);
-    logger.setContext('TEST');
-    logger.log('test');
-    logger.warn('test');
-    logger.error('test', null);
-    logger.debug('test');
-    logger.debug('verbose');
+
+    logger.log('log');
+    logger.warn('warn');
+    logger.error('error', null);
+    logger.debug('debug');
+    logger.verbose('verbose');
   });
 
 });

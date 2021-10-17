@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { CoreModule, LoggerService } from './core';
+import { CoreModule, LoggerService, Logger } from './core';
 import { RestApiModule } from './rest-api';
 import { RepositoryModule } from './repository';
 
@@ -12,8 +12,7 @@ import { RepositoryModule } from './repository';
   ]
 })
 export class AppModule {
-  constructor(logger: LoggerService) {
-    logger.setContext('AppModule');
-    logger.log('loaded');
+  constructor(@Logger('AppModule') logger: LoggerService) {
+    logger.debug('loaded');
   }
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoreModule, LoggerService } from '../core';
+import { CoreModule, LoggerService, Logger } from '../core';
 import { Employee } from './employee.entity';
 
 const EmployeeRepository = TypeOrmModule.forFeature([Employee]);
@@ -24,8 +24,7 @@ const EmployeeRepository = TypeOrmModule.forFeature([Employee]);
   ]
 })
 export class RepositoryModule {
-  constructor(logger: LoggerService) {
-    logger.setContext('RepositoryModule');
+  constructor(@Logger('RepositoryModule') logger: LoggerService) {
     logger.log('loaded');
   }
 }
