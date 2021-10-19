@@ -82,4 +82,3 @@ docker run -d \
 
 * Authentication - add basic authentication middleware
 * Health Check
-* Error handling

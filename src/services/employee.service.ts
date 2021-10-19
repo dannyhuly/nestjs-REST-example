@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindManyOptions } from 'typeorm';
 
@@ -6,7 +6,6 @@ import { Employee } from '../repository';
 import { LoggerService, Logger } from '../core';
 import { IEmployee } from '../models/IEmployee';
 import { IPagingRequest } from '../models/IPagingRequest';
-
 
 @Injectable()
 export class EmployeesService {
@@ -26,7 +25,7 @@ export class EmployeesService {
         this.logger.verbose(`get: ${id}`);
         const employee = await this.employeeRepository.findOne(id);
         if(!employee) {
-            throw new Error(`Not Found: ${id}`)
+            throw new NotFoundException({ id,  error: `Employees not found` });
         }
         return employee;
     }
@@ -45,7 +44,7 @@ export class EmployeesService {
         this.logger.verbose(`update ${employee}`);
         const res = await this.employeeRepository.update({ id }, employee);
         if(res.affected == 0) {
-            throw new Error(`Not Found: ${id}`);
+            throw new NotFoundException({ id,  error: `Employees not found` });
         }
         return res;
     }
@@ -54,7 +53,7 @@ export class EmployeesService {
         this.logger.verbose(`delete ${id}`);
         const res = await this.employeeRepository.delete(id);
         if(res.affected == 0) {
-            throw new Error(`Not Found: ${id}`);
+            throw new NotFoundException({ id,  error: `Employees not found` });
         }
         return res;
     }
