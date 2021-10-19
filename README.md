@@ -76,10 +76,10 @@ docker run -d \
 * Integration Test
 * SQLite - support state
 * [Logger](./src/core/logger/README.md)
+* [Configuration](./src/config/README.md)
 
 ### TODOS
 
 * Authentication - add basic authentication middleware
 * Health Check
 * Error handling
-* Configuration for environments (dev,prod)

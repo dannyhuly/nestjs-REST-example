@@ -5,6 +5,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Logger } from './core';
 import { getLoggerProviderToken } from './core/logger/logger.provider';
+import { ConfigService } from '@nestjs/config';
+import { IHttpServerConfig } from './config/IHttpServerConfig';
 
 async function bootstrap() {
   Logger('Main'); // declare new logger before initalizing the application
@@ -16,6 +18,10 @@ async function bootstrap() {
   // set logger
   const logger = await app.resolve(getLoggerProviderToken('Main'));
   app.useLogger(logger);
+
+  // get config
+  const configService = await app.resolve(ConfigService);
+  const httpServerConfig = configService.get<IHttpServerConfig>('httpServer');
 
   // set validation
   app.useGlobalPipes(new ValidationPipe());
@@ -34,7 +40,7 @@ async function bootstrap() {
     logger.log("Shutdown | done !");
   });
 
-  const port = 3000;
-  await app.listen(port);
+  await app.listen(httpServerConfig.port);
+  logger.log(`Server started on port: ${httpServerConfig.port}`);
 }
 bootstrap();
