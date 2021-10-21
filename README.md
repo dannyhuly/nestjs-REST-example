@@ -77,7 +77,7 @@ docker run -d \
 * SQLite - support state
 * [Logger](./src/core/logger/README.md)
 * [Configuration](./src/config/README.md)
-
+* [Migrations](./src/migration/README.md)
 ### TODOS
 
 * Authentication - add basic authentication middleware
