@@ -11,7 +11,7 @@ import { IPagingRequest } from '../models/IPagingRequest';
 export class EmployeesService {
     constructor(
         @InjectRepository(Employee) private employeeRepository: Repository<Employee>,
-        @Logger('EmployeesService') private logger: LoggerService
+        @Logger('EmployeesService') private logger: LoggerService,
     ) { }
 
     async create(employee: IEmployee) {

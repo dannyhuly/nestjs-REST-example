@@ -15,12 +15,16 @@ import { ApiTags, ApiParam } from '@nestjs/swagger';
 import { PagingRequestDto } from '../dto';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './EmployeeDto';
 import { EmployeesService } from '../../services/employee.service';
-import { IEmployee } from 'src/models/IEmployee';
+import { IEmployee } from '../../models/IEmployee';
+import { Logger, LoggerService } from '../../core';
 
 @ApiTags('employees')
 @Controller('employees')
 export class EmployeesController {
-  constructor(private employeesService: EmployeesService) { }
+  constructor(
+    private employeesService: EmployeesService,
+    @Logger('EmployeesService') private logger: LoggerService,
+  ) { }
 
   @Post()
   async create(@Body() employeeDto: CreateEmployeeDto) {
@@ -36,12 +40,18 @@ export class EmployeesController {
   @Get(':id')
   @ApiParam({ name: 'id', required: true, type: Number })
   findOne(@Param('id', ParseIntPipe) id: IEmployee['id']) {
+    this.logger.ctx
+      .withLabel('employId', id);
+
     return this.employeesService.find(id);
   }
 
   @Put(':id')
   @ApiParam({ name: 'id', required: true, type: Number })
   update(@Param('id', ParseIntPipe) id: IEmployee['id'], @Body() updateEemployeeDto: UpdateEmployeeDto) {
+    this.logger.ctx
+      .withLabel('employId', id);
+
     return this.employeesService.update(id, updateEemployeeDto)
   }
 
@@ -49,6 +59,9 @@ export class EmployeesController {
   @HttpCode(204)
   @ApiParam({ name: 'id', required: true, type: Number })
   remove(@Param('id', ParseIntPipe) id: IEmployee['id']) {
+    this.logger.ctx
+      .withLabel('employId', id);
+
     this.employeesService.delete(id);
   }
 }

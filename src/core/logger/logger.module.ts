@@ -1,7 +1,7 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { DynamicModule } from '@nestjs/common';
 import { LoggerService } from './logger.service';
 import { createLoggerProviders } from './logger.provider';
-
+import { LoggerCtx } from './logger-ctx.provider';
 export class LoggerModule {
   static forRoot(): Promise<DynamicModule> {
 
@@ -10,8 +10,16 @@ export class LoggerModule {
         const prefixedLoggerProviders = createLoggerProviders();
         resolve({
           module: LoggerModule,
-          providers: [LoggerService, ...prefixedLoggerProviders],
-          exports: [LoggerService, ...prefixedLoggerProviders],
+          providers: [
+            LoggerCtx,
+            LoggerService, 
+            ...prefixedLoggerProviders,
+          ],
+          exports: [
+            LoggerCtx, 
+            LoggerService,
+            ...prefixedLoggerProviders
+          ],
         })
       }, 0);
     })

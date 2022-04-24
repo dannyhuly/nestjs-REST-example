@@ -4,14 +4,16 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from '../config/configuration';
 
 @Module({
-  imports: [LoggerModule.forRoot(),
-  ConfigModule.forRoot({
-    ignoreEnvFile: true,
-    load: [configuration],
-  }),],
+  imports: [
+    LoggerModule.forRoot(),
+    ConfigModule.forRoot({
+      ignoreEnvFile: true,
+      load: [configuration],
+    }),
+  ],
   exports: [
     LoggerModule,
-    ConfigModule
+    ConfigModule,
   ],
 })
-export class CoreModule {}
+export class CoreModule { }

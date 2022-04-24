@@ -8,9 +8,8 @@ import { EmployeesController } from '../src/rest-api/employees/employees.control
 import { CreateEmployeeDto, UpdateEmployeeDto } from '../src/rest-api/employees/EmployeeDto';
 import { EmployeesService } from '../src/services/employee.service';
 import { Employee } from '../src/repository';
-import { LoggerService } from '../src/core';
 import { getLoggerProviderToken } from '../src/core/logger/logger.provider';
-
+import { LoggerServiceMockHelper } from '../src/core/logger/logger.service.mock';
 
 describe('EmployeesController (e2e)', () => {
   let app: INestApplication;
@@ -25,23 +24,24 @@ describe('EmployeesController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      controllers: [EmployeesController],
+      controllers: [
+        EmployeesController
+      ],
       providers: [
-        {
-          provide: getRepositoryToken(Employee),
-          useClass: Repository,
-        },
-        {
-          provide: getLoggerProviderToken('EmployeesService'),
-          useClass: LoggerService
-        },
         EmployeesService,
 
+        // mocks
+        { provide: getRepositoryToken(Employee), useClass: Repository },
+        { provide: getLoggerProviderToken('EmployeesService'), useValue: LoggerServiceMockHelper.createMock() },
       ],
-    }).compile();
+    })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+
+    // const logger = await app.resolve<LoggerService>(getLoggerProviderToken('EmployeesService'));
+    // logger.setContext('test');
 
     repo = app.get<Repository<Employee>>(getRepositoryToken(Employee));
 

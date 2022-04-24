@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { Logger } from './core';
+import { Logger, LoggerService } from './core';
 import { getLoggerProviderToken } from './core/logger/logger.provider';
 import { ConfigService } from '@nestjs/config';
 import { IHttpServerConfig } from './config/IHttpServerConfig';
@@ -16,7 +16,7 @@ async function bootstrap() {
   });
 
   // set logger
-  const logger = await app.resolve(getLoggerProviderToken('Main'));
+  const logger = await app.resolve<LoggerService>(getLoggerProviderToken('Main'));
   app.useLogger(logger);
 
   // get config

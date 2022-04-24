@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-import { CoreModule, LoggerService, Logger } from './core';
+import { CoreModule, LoggerService, Logger, LoggerRequestIdMiddleware } from './core';
 import { RestApiModule } from './rest-api';
 import { RepositoryModule } from './repository';
 import { IEnvironmentConfig } from './config/IEnvironmentConfig';
@@ -13,7 +13,7 @@ import { IEnvironmentConfig } from './config/IEnvironmentConfig';
     RepositoryModule,
   ]
 })
-export class AppModule {
+export class AppModule implements NestModule {
   constructor(
     @Logger('AppModule') private logger: LoggerService,
     private configService: ConfigService,
@@ -22,4 +22,11 @@ export class AppModule {
     const environmentConfig = this.configService.get<IEnvironmentConfig>('environment');
     this.logger.log(`Environment: ${environmentConfig.type}`);
   }
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerRequestIdMiddleware)
+      .forRoutes('*');
+  }
+
 }
